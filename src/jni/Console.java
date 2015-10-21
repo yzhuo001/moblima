@@ -2,7 +2,7 @@ package jni;
 
 public final class Console {
     static {
-        System.loadLibrary("jni/console");
+        System.loadLibrary("console");
     }
 
     public static class BufferInfo {
