@@ -12,8 +12,11 @@ extern "C" {
  * Method:    getChar
  * Signature: ()I
  */
-JNIEXPORT jint JNICALL Java_jni_Console_getChar
+JNIEXPORT jchar JNICALL Java_jni_Console_getChar
   (JNIEnv *, jclass);
+
+JNIEXPORT jboolean JNICALL Java_jni_Console_charPressed
+(JNIEnv *, jclass, jchar);
 
 /*
  * Class:     jni_Console
@@ -21,7 +24,7 @@ JNIEXPORT jint JNICALL Java_jni_Console_getChar
  * Signature: (SS)V
  */
 JNIEXPORT void JNICALL Java_jni_Console_goToXY
-  (JNIEnv *, jclass, jshort, jshort);
+  (JNIEnv *, jclass, jint, jint);
 
 /*
  * Class:     jni_Console
@@ -29,7 +32,7 @@ JNIEXPORT void JNICALL Java_jni_Console_goToXY
  * Signature: ()V
  */
 JNIEXPORT void JNICALL Java_jni_Console_clear
-  (JNIEnv *, jclass);
+  (JNIEnv *, jclass, jint, jint, jint, jint);
 
 /*
  * Class:     jni_Console
@@ -54,6 +57,8 @@ JNIEXPORT jint JNICALL Java_jni_Console_getTextAttribute
  */
 JNIEXPORT void JNICALL Java_jni_Console_setTextAttribute
   (JNIEnv *, jclass, jint);
+
+JNIEXPORT void JNICALL Java_jni_Console_putCharIn(JNIEnv*, jclass, jchar);
 
 #ifdef __cplusplus
 }
