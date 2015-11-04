@@ -1,40 +1,66 @@
 package moblima.model;
 
+import moblima.util.Enums;
+
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.stream.Stream;
 
 public class TicketPrice implements Serializable {
-    private int basePrice;
-    private float holidayMultiplier;
-    private HashMap<Movie.Type, Float> movieTypeMultipliers;
+	private int basePrice;
+	private HashMap<Multiplier, Float> multipliers = new HashMap<>();
+	private HashSet<LocalDate> holidays = new HashSet<>();
 
-    TicketPrice(int basePrice, float holidayMultiplier) {
-        this.basePrice = basePrice;
-        this.holidayMultiplier = holidayMultiplier;
-        movieTypeMultipliers = new HashMap<>(Movie.Type.values().length);
-    }
+	public enum Multiplier {
+		CHILDREN,
+		SENIOR_CITIZEN,
+		WEEKEND,
+		AFTER_6,
+		PUBLIC_HOLIDAY,
+		PLATINUM_CINEMA,
+		BLOCKBUSTER,
+		THREE_DIMENSION;
 
-    public int getBasePrice() {
-        return basePrice;
-    }
+		@Override
+		public String toString() {
+			switch (this) {
+				case AFTER_6:
+					return "After 18:00";
 
-    public void setBasePrice(int basePrice) {
-        this.basePrice = basePrice;
-    }
+				case THREE_DIMENSION:
+					return "3D";
 
-    public float getHolidayMultiplier() {
-        return holidayMultiplier;
-    }
+				default:
+					return Enums.format(super.toString());
+			}
+		}
+	}
 
-    public void setHolidayMultiplier(float holidayMultiplier) {
-        this.holidayMultiplier = holidayMultiplier;
-    }
+	public TicketPrice(int basePrice) {
+		this.basePrice = basePrice;
+	}
 
-    public float getMultiplierForMovieType(Movie.Type type) {
-        return movieTypeMultipliers.getOrDefault(type, 1.f);
-    }
+	public int getBasePrice() {
+		return basePrice;
+	}
 
-    public void setMultiplierForMovieType(Movie.Type movieType, float multiplier) {
-        movieTypeMultipliers.put(movieType, multiplier);
-    }
+	public void setBasePrice(int basePrice) {
+		this.basePrice = basePrice;
+	}
+
+	public float getMultiplier(Multiplier multiplier) {
+		return multipliers.getOrDefault(multiplier, 1.f);
+	}
+
+	public void setMultiplier(Multiplier multiplier, float value) {
+		multipliers.put(multiplier, value);
+	}
+
+	public HashSet<LocalDate> getHolidays() {
+		return holidays;
+	}
 }

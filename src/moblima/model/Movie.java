@@ -1,114 +1,180 @@
 package moblima.model;
 
-import java.awt.print.Book;
+import moblima.util.Enums;
+
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.List;
+
 
 public class Movie implements Serializable, Comparable<Movie> {
+	int id;
+	private String title;
+	private EnumSet<Genre> genres = EnumSet.noneOf(Genre.class);
+	private Classification classification = Classification.GENERAL;
+	private String synopsis;
+	private String director;
+	private int length;
+	private List<String> casts = new ArrayList<>();
+	private List<Review> reviews = new ArrayList<>();
+	private ShowingStatus showingStatus = ShowingStatus.NOW_SHOWING;
 
-    public enum ShowingStatus {
-        COMING_SOON,
-        PREVIEW,
-        NOW_SHOWING,
-        END_OF_SHOWING
-    }
+	public Movie() {
+	}
+	public Movie(int id) {
+		this.id = id;
+	}
 
-    public enum Type {
-        ThreeDimension,
-        BlockBuster
-    }
+	public int getId() {
+		return id;
+	}
 
-    int id;
-    String title;
-    EnumSet<Type> types;
-    String genres;
-    String synopsis;
-    String director;
-    List<String> casts = new ArrayList<>();
-    List<Review> reviews = new ArrayList<>();
-    ShowingStatus showingStatus;
+	public String getTitle() {
+		return title;
+	}
 
-    Movie(int id) {
-        this.id = id;
-    }
+	public void setTitle(String title) {
+		this.title = title;
+	}
 
-    Movie(int id, String title, EnumSet<Type> types, String genres, String synopsis, String director, List<String> casts, ShowingStatus showingStatus) {
-        this.id = id;
-        this.title = title;
-        this.types = types;
-        this.genres = genres;
-        this.synopsis = synopsis;
-        this.director = director;
-        this.casts = casts;
-        this.showingStatus = showingStatus;
-    }
+	public EnumSet<Genre> getGenres() {
+		return genres;
+	}
 
-    public int getId() {
-        return id;
-    }
+	public void setGenres(EnumSet<Genre> genres) {
+		this.genres = genres;
+	}
 
-    public String getTitle() {
-        return title;
-    }
+	public String getSynopsis() {
+		return synopsis;
+	}
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+	public void setSynopsis(String synopsis) {
+		this.synopsis = synopsis;
+	}
 
-    public String getGenres() {
-        return genres;
-    }
+	public String getDirector() {
+		return director;
+	}
 
-    public void setGenres(String genres) {
-        this.genres = genres;
-    }
+	public void setDirector(String director) {
+		this.director = director;
+	}
 
-    public String getSynopsis() {
-        return synopsis;
-    }
+	public List<String> getCasts() {
+		return casts;
+	}
 
-    public void setSynopsis(String synopsis) {
-        this.synopsis = synopsis;
-    }
+	public void setCasts(List<String> casts) {
+		this.casts = casts;
+	}
 
-    public String getDirector() {
-        return director;
-    }
+	public List<Review> getReviews() {
+		return reviews;
+	}
 
-    public void setDirector(String director) {
-        this.director = director;
-    }
+	public ShowingStatus getShowingStatus() {
+		return showingStatus;
+	}
 
-    public List<String> getCasts() {
-        return casts;
-    }
+	public void setShowingStatus(ShowingStatus showingStatus) {
+		this.showingStatus = showingStatus;
+	}
 
-    public void setCasts(List<String> casts) {
-        this.casts = casts;
-    }
+	public int getLength() {
+		return length;
+	}
 
-    public List<Review> getReviews() {
-        return reviews;
-    }
+	public void setLength(int length) {
+		this.length = length;
+	}
 
-    public ShowingStatus getShowingStatus() {
-        return showingStatus;
-    }
+	public float getAverageRating() {
+		if (reviews.size() == 0) {
+			return Float.NaN;
+		}
 
-    public void setShowingStatus(ShowingStatus showingStatus) {
-        this.showingStatus = showingStatus;
-    }
+		return (float) reviews.stream().mapToInt(Review::getRating).sum() / reviews.size();
+	}
 
-    public float getAverageRating() {
-        if (reviews.size() == 0) {
-            return 0;
-        }
+	public void addReview(Review review) {
+		reviews.add(review);
+	}
 
-        return (float)reviews.stream().mapToInt(Review::getRating).sum() / reviews.size();
-    }
+	public Classification getClassification() {
+		return classification;
+	}
 
-    @Override
-    public int compareTo(Movie o) {
-        return Integer.compare(getId(), o.getId());
-    }
+	public void setClassification(Classification classification) {
+		this.classification = classification;
+	}
+
+	@Override
+	public int compareTo(Movie o) {
+		return Integer.compare(getId(), o.getId());
+	}
+
+	@Override
+	public String toString() {
+		return title;
+	}
+
+	public enum ShowingStatus {
+		NOW_SHOWING,
+		PREVIEW,
+		COMING_SOON,
+		END_OF_SHOWING;
+
+		@Override
+		public String toString() {
+			return Enums.format(super.toString());
+		}
+	}
+
+	public enum Classification {
+		GENERAL,
+		PG,
+		PG13,
+		NC16,
+		M18,
+		R21;
+
+		@Override
+		public String toString() {
+			switch (this) {
+				case GENERAL: return "General";
+				default: return super.toString();
+			}
+		}
+	}
+
+	public enum Genre {
+		ACTION,
+		ADVENTURE,
+		ANIMATION,
+		DRAMA,
+		MYSTERY,
+		SCI_FI,
+		COMEDY,
+		HORROR,
+		THRILLER,
+		BLOCKBUSTER,
+		THREE_DIMENSION;
+
+
+		@Override
+		public String toString() {
+			switch (this) {
+				case THREE_DIMENSION:
+					return "3D";
+
+				case SCI_FI:
+					return "Sci-fi";
+
+				default:
+					return Enums.format(super.toString());
+			}
+		}
+	}
 }

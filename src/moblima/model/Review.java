@@ -3,33 +3,34 @@ package moblima.model;
 import java.io.Serializable;
 
 public class Review implements Serializable {
-    private String username;
-    private int rating;
-    private String text;
+	private String username;
+	private int rating;
+	private String text;
 
-    public Review(String username, int rating, String text) {
-        this.username = username;
-        this.rating = rating;
-        this.text = text;
-    }
+	public static final int MIN_RATING = 0;
+	public static final int MAX_RATING = 5;
 
-    public int getRating() {
-        return rating;
-    }
+	public void setUsername(String username) {
+		this.username = username;
+	}
 
-    public String getText() {
-        return text;
-    }
+	public void setRating(int rating) {
+		this.rating = rating;
+	}
 
-    public String getUsername() {
-        return username;
-    }
+	public void setText(String text) {
+		this.text = text;
+	}
 
-    public static int getMinRating() {
-        return 1;
-    }
+	public int getRating() {
+		return rating;
+	}
 
-    public static int getMaxRating() {
-        return 5;
-    }
+	public String getText() {
+		return text;
+	}
+
+	public String getUsername() {
+		return username;
+	}
 }

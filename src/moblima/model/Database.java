@@ -1,33 +1,43 @@
 package moblima.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Database implements Serializable {
-    private Admin admin = new Admin("admin", "");
-    private BookingList bookingList = new BookingList();
-    private ShowTimeList showTimeList = new ShowTimeList(bookingList);
-    private MovieList movieList = new MovieList(showTimeList);
-    private TicketPrice ticketPrice = new TicketPrice(20, 1.3f);
+	private Admin admin = new Admin("admin", "");
+	private BookingDb bookingDb = new BookingDb();
+	private ShowTimeDb showTimeDb = new ShowTimeDb(bookingDb);
+	private MovieDb movieDb = new MovieDb(showTimeDb);
+	private TicketPrice ticketPrice = new TicketPrice(20);
+	private List<Cineplex> cineplexes = new ArrayList<>();
 
-    public Database() {}
+	public void wakeUp() {
+		showTimeDb.bookingDb = bookingDb;
+		movieDb.showTimeDb = showTimeDb;
+	}
 
-    public Admin getAdmin() {
-        return admin;
-    }
+	public Admin getAdmin() {
+		return admin;
+	}
 
-    public BookingList getBookingList() {
-        return bookingList;
-    }
+	public BookingDb getBookingDb() {
+		return bookingDb;
+	}
 
-    public ShowTimeList getShowTimeList() {
-        return showTimeList;
-    }
+	public ShowTimeDb getShowTimeDb() {
+		return showTimeDb;
+	}
 
-    public MovieList getMovieList() {
-        return movieList;
-    }
+	public MovieDb getMovieDb() {
+		return movieDb;
+	}
 
-    public TicketPrice getTicketPrice() {
-        return ticketPrice;
-    }
+	public TicketPrice getTicketPrice() {
+		return ticketPrice;
+	}
+
+	public List<Cineplex> getCineplexes() {
+		return cineplexes;
+	}
 }

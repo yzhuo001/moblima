@@ -1,24 +1,59 @@
 package moblima.view;
 
-import jni.Color;
-import jni.TextColor;
-import moblima.model.Database;
+import jni.Console;
 
-public class App implements Component {
-    Database db;
+/**
+ * Manages the program's main flow.
+ * There should be ONLY ONE App instance during the program's runtime.
+ * This instance can be accessed through #inst enum constant.
+ */
+public enum App {
+	/**
+	 * The single instance of App
+	 */
+	inst;
 
-    public App(Database db) {
-        this.db = db;
-    }
+	/**
+	 * The component having keyboard focus.
+	 */
+	private Component focus;
 
-    public void render() {
-        try (TextColor ignored =  new TextColor(Color.RED)) {
-            System.out.println("==========================================================");
-            System.out.println("Group 6 - Movie Booking and Listing Management Application");
-            System.out.println("==========================================================");
-        }
+	private boolean running = true;
 
-        Input.option(Input.Orientation.Horizontal, "Select module: ", "Admin", "Movie Goer")
-        .ifPresent(option -> (option == 0 ? new Admin(db) : new MovieGoer(db)).render());
-    }
+	/**
+	 * Runs the keyboard loop.
+	 */
+	public void run() {
+		for (; ; ) {
+			char key = Console.getChar();
+
+			//let all components handle key event, from child to parent
+			for (Component com = focus; com != null && !com.onKey(key); com = com.getParent())
+				;
+
+			if (!running) {
+				return;
+			}
+		}
+	}
+
+	/**
+	 * @return The component having keyboard focus.
+	 */
+	public Component getFocus() {
+		return focus;
+	}
+
+
+	/**
+	 * @param focus The component will receive keyboard focus. If focus is null, the program will quit.
+	 */
+	public void setFocus(Component focus) {
+		if (focus == null) {
+			running = false;
+		} else {
+			this.focus = focus;
+			focus.onFocus();
+		}
+	}
 }
