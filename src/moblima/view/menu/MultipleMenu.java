@@ -1,74 +1,105 @@
 package moblima.view.menu;
 
-import jni.Color;
 import jni.Key;
-import jni.TextColor;
-import moblima.util.Pair;
 import moblima.view.Component;
+import util.Pair;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-public class MultipleMenu extends MenuStr<Consumer<Set<Pair<Integer, Object>>>> {
-	private final Set<Integer> selected = new HashSet<>();
+/**
+ * A {@code MultipleMenu} is a {@link Menu} which allows the user to select more than one option. The user selects an
+ * option by pressing SPACE and accepts the selected options by pressing ENTER.
+ *
+ * {@code MultipleMenu} returns a list of pairs (selected option index, selected option)
+ *
+ * @param <OptionType> the type of all options
+ */
+public class MultipleMenu<OptionType> extends Menu<OptionType, List<Pair<Integer, OptionType>>> {
+  private final Set<Integer> selected = new HashSet<>();
 
-	public MultipleMenu(Component parent, Consumer<Set<Pair<Integer, Object>>> onAccept, String message, Object... options) {
-		super(parent, onAccept, message, options);
-	}
+  /**
+   * @see Menu#Menu(Orientation, String, Object[])
+   */
+  @SafeVarargs
+  public MultipleMenu(Orientation orientation, String message, OptionType... options) {
+    super(orientation, message, options);
+  }
 
-	public MultipleMenu(Component parent, Consumer<Set<Pair<Integer, Object>>> onAccept, Orientation orientation, String message, Object... options) {
-		super(parent, onAccept, orientation, message, options);
-	}
+  /**
+   * @see Menu#Menu(Component, Orientation, String, Object[])
+   */
+  @SafeVarargs
+  public MultipleMenu(Component parent, Orientation orientation, String message, OptionType... options) {
+    super(parent, orientation, message, options);
+  }
 
-	public void select(int index) {
-		selected.add(index);
-	}
+  /**
+   * @see Menu#Menu(Orientation, String, List)
+   */
+  public MultipleMenu(Orientation orientation, String message, List<OptionType> options) {
+    super(orientation, message, options);
+  }
 
-	@Override
-	protected void renderFooter() {
-		try (TextColor ignored = new TextColor(Color.CYAN)) {
-			System.out.print("Selected");
-		}
+  /**
+   * @see Menu#Menu(Component, Orientation, String, List)
+   */
+  public MultipleMenu(Component parent, Orientation orientation, String message, List<OptionType> options) {
+    super(parent, orientation, message, options);
+  }
 
-		if (orientation == Orientation.Horizontal) {
-			selected.stream().forEach(val -> System.out.print(" " + options[val]));
-			System.out.println();
-		} else {
-			System.out.println();
-			selected.stream().forEach(val -> System.out.println(options[val]));
-		}
-	}
 
-	@Override
-	public boolean doOnKey(char c) {
-		if (super.doOnKey(c)) {
-			return true;
-		}
+  /**
+   * Selects the nth option.
+   *
+   * @param index the index of the option to select
+   */
+  public void select(int index) {
+    selected.add(index);
+  }
 
-		switch (c) {
-			case Key.ENTER:
-				selected.add(active);
-				render();
-				return true;
+  @Override
+  public boolean handleKey(char c) {
+    if (super.handleKey(c)) {
+      return true;
+    }
 
-			case Key.DELETE:
-				selected.remove(active);
-				this.render();
-				return true;
+    switch (c) {
+      case ' ':
+        if (selected.contains(active)) {
+          selected.remove(active);
+        } else {
+          selected.add(active);
+        }
+        render();
+        return true;
 
-			case Key.CTRL_ENTER:
-				if (selected.isEmpty()) {
-					return false;
-				}
-				this.onAccept.accept(
-					selected.stream()
-						.map(sel -> new Pair<Integer, Object>(sel, options[sel]))
-						.collect(Collectors.toSet()));
-				return true;
-		}
+      case Key.ENTER:
+        if (selected.size() > 0) {
+          this.setResult(
+            selected.stream()
+              .map(sel -> new Pair<>(sel, options.get(sel)))
+              .collect(Collectors.toList())
+          );
+        }
+        return true;
+    }
 
-		return false;
-	}
+    return false;
+  }
+
+  /**
+   * Adds a green tick mark to the formatting string of the option if it is selected.
+   */
+  @Override
+  protected String getOption(int index) {
+    String str = options.get(index).toString();
+    if (selected.contains(index)) {
+      str = "{c,GREEN;√} " + str;
+    }
+
+    return str;
+  }
 }

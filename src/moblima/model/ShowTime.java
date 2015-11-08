@@ -1,73 +1,114 @@
 package moblima.model;
 
+import util.Pair;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * The type Show time.
+ */
 public class ShowTime implements Serializable, Comparable<ShowTime> {
-	int id;
-	int movieId;
-	int cineplexId;
-	int cinemaId;
-	LocalDateTime startTime;
+  int id;
+  int movie;
+  LocalDateTime startTime;
+  private Pair<Integer, Integer> cineplexCinemaPair = new Pair<>(0, 0);
 
-	ShowTime(int id) {
-		this.id = id;
-	}
+  /**
+   * Constructs a new show time associated with the given ID.
+   *
+   * @param id the id
+   */
+  ShowTime(int id) {
+    this.id = id;
+  }
 
 
-	public ShowTime() {}
+  /**
+   * Constructs an empty show time.
+   */
+  public ShowTime() {
+  }
 
-	public int getId() {
-		return id;
-	}
+  /**
+   * Gets the associated ID.
+   *
+   * @return the associated ID
+   */
+  public int getId() {
+    return id;
+  }
 
-	public int getMovieId() {
-		return movieId;
-	}
+  /**
+   * Gets the associated movie.
+   *
+   * @return the the associated movie
+   */
+  public int getMovie() {
+    return movie;
+  }
 
-	public int getCinemaId() {
-		return cinemaId;
-	}
+  /**
+   * Sets the associated movie.
+   *
+   * @param movie the associated movie
+   */
+  public void setMovie(int movie) {
+    this.movie = movie;
+  }
 
-	public LocalDateTime getStartTime() {
-		return startTime;
-	}
+  /**
+   * Gets the start time.
+   *
+   * @return the start time
+   */
+  public LocalDateTime getStartTime() {
+    return startTime;
+  }
 
-	public void setMovieId(int movieId) {
-		this.movieId = movieId;
-	}
+  /**
+   * Sets the start time.
+   *
+   * @param startTime the start time
+   */
+  public void setStartTime(LocalDateTime startTime) {
+    this.startTime = startTime;
+  }
 
-	public void setCinemaId(int cinemaId) {
-		this.cinemaId = cinemaId;
-	}
+  /**
+   * Gets the cinema object for this show time.
+   *
+   * @param cineplexes the list all cineplexes
+   * @return the cinema object
+   */
+  public Cinema getCinema(List<Cineplex> cineplexes) {
+    return cineplexes.get(cineplexCinemaPair.first).getCinemas().get(cineplexCinemaPair.second);
+  }
 
-	public void setStartTime(LocalDateTime startTime) {
-		this.startTime = startTime;
-	}
+  /**
+   * Compares 2 show times by ID.
+   */
+  @Override
+  public int compareTo(ShowTime o) {
+    return Integer.compare(getId(), o.getId());
+  }
 
-	public int getCineplexId() {
-		return cineplexId;
-	}
+  /**
+   * Gets the (cineplex ID, cinema ID) pair for this show time.
+   *
+   * @return the (cineplex ID, cinema ID) pair
+   */
+  public Pair<Integer, Integer> getCineplexCinema() {
+    return cineplexCinemaPair;
+  }
 
-	public void setCineplexId(int cineplexId) {
-		this.cineplexId = cineplexId;
-	}
-
-	public Cinema getCinema(List<Cineplex> cineplexes) {
-		return cineplexes.get(getCineplexId()).getCinemas().get(getCinemaId());
-	}
-
-	@Override
-	public int compareTo(ShowTime o) {
-		return Integer.compare(getId(), o.getId());
-	}
-
-	public String toString(List<Cineplex> cineplexes, MovieDb movieDb) {
-		return String.format("%s %s at %s",
-			movieDb.get(getMovieId()).get(),
-			getStartTime(),
-			getCinema(cineplexes)
-		);
-	}
+  /**
+   * Sets the cineplex and the cinema for this show time.
+   *
+   * @param cineplexCinemaPair the (cineplex ID, cinema ID) pair
+   */
+  public void setCineplexCinema(Pair<Integer, Integer> cineplexCinemaPair) {
+    this.cineplexCinemaPair = cineplexCinemaPair;
+  }
 }

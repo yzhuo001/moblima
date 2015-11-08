@@ -2,38 +2,53 @@ package moblima.view;
 
 import jni.Color;
 import jni.Console;
-import jni.TextColor;
 
-import java.util.function.Consumer;
-
+/**
+ * A namespace for all utilities.
+ */
 public class Util {
-	public static void printCenter(String str) {
-		int indent = (Console.getBufferInfo().windowWidth() + str.length()) / 2;
-		String format = String.format("%%%ds\n", indent);
-		System.out.printf(format, str);
-	}
+  /**
+   * Gets the suffix of a day in month.
+   *
+   * @param day the day, ranging from 1 to 31
+   * @return the suffix
+   */
+  public static String getDaySuffix(int day) {
+    switch (day) {
+      case 1:
+      case 21:
+      case 31:
+        return "st";
+      case 2:
+      case 22:
+        return "nd";
+      case 3:
+      case 23:
+        return "rd";
+      default:
+        return "th";
+    }
+  }
 
-	public static String getDaySuffix(int day) {
-		switch (day) {
-			case 1:
-			case 21:
-			case 31:
-				return "st";
-			case 2:
-			case 22:
-				return "nd";
-			case 3:
-			case 23:
-				return "rd";
-			default:
-				return "th";
-		}
-	}
+  /**
+   * Prints a successful message and pause the console screen.
+   *
+   * @param message the message
+   */
+  public static void pause(String message) {
+    pause(message, false);
+  }
 
-	public static void pause(String message) {
-		try (TextColor ignored = new TextColor(Color.GREEN)) {
-			System.out.printf("%s%s", message, ". Press any key to continue...");
-		}
-		Console.getChar();
-	}
+  /**
+   * Prints a message and pause the console screen.
+   *
+   * @param message the message
+   * @param isError {@code true} if {@code message} is an error message,
+   *                            or {@code false} if {@code message} is a successful message
+   */
+  public static void pause(String message, boolean isError) {
+    String color = (isError ? Color.RED : Color.GREEN).toString();
+    Printer.outf("{c,%s;%s. Press any key to continue...}", color, message);
+    Console.waitKey();
+  }
 }

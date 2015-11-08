@@ -2,35 +2,73 @@ package moblima.model;
 
 import java.io.Serializable;
 
+/**
+ * Represents a review for a movie.
+ */
 public class Review implements Serializable {
-	private String username;
-	private int rating;
-	private String text;
+  /**
+   * The minimum rating possible.
+   */
+  public static final int MIN_RATING = 0;
+  /**
+   * The maximum rating possible..
+   */
+  public static final int MAX_RATING = 5;
+  private String username;
+  private int rating;
+  private String text;
 
-	public static final int MIN_RATING = 0;
-	public static final int MAX_RATING = 5;
+  /**
+   * Gets the rating.
+   *
+   * @return the rating
+   */
+  public int getRating() {
+    return rating;
+  }
 
-	public void setUsername(String username) {
-		this.username = username;
-	}
+  /**
+   * Sets the rating.
+   *
+   * @param rating the rating
+   */
+  public void setRating(int rating) {
+    this.rating = rating;
+  }
 
-	public void setRating(int rating) {
-		this.rating = rating;
-	}
+  /**
+   * Gets the detailed review.
+   *
+   * @return the detailed review
+   */
+  public String getText() {
+    return text;
+  }
 
-	public void setText(String text) {
-		this.text = text;
-	}
+  /**
+   * Sets the detailed review.
+   *
+   * @param text the detailed review
+   */
+  public void setText(String text) {
+    this.text = text;
+  }
 
-	public int getRating() {
-		return rating;
-	}
+  /**
+   * Gets the user name.
+   *
+   * @return the username
+   */
+  public String getUsername() {
+    return username;
+  }
 
-	public String getText() {
-		return text;
-	}
-
-	public String getUsername() {
-		return username;
-	}
+  /**
+   * Sets the user name.
+   *
+   * @param username the username
+   */
+  public void setUsername(String username) {
+    this.username = username;
+  }
 }

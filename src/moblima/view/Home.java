@@ -1,45 +1,39 @@
 package moblima.view;
 
-import jni.Color;
 import jni.Console;
-import jni.TextColor;
 import moblima.model.Database;
-import moblima.view.menu.MenuStr;
+import moblima.view.admin.AdminSection;
+import moblima.view.menu.Menu;
 import moblima.view.menu.SingleMenu;
+import moblima.view.moviegoer.MovieGoerSection;
 
-public class Home extends Component {
-	private final SingleMenu menu;
+/**
+ * {@code Home} screen displays the application name and allows the user to select which section to enter.
+ */
+public class Home {
+  /**
+   * Displays the screen.
+   *
+   * @param db the application database
+   */
+  public static void exec(Database db) {
+    SingleMenu<String> menu = new SingleMenu<>(
+      Menu.Orientation.Horizontal,
+      "{m,40,4;Select a section: }",
+      "Admin",
+      "Movie Goer"
+    );
 
-	public Home(Database db) {
-		super(null);
-		menu = new SingleMenu(this,
-			(choice, ignored) -> {
-				switch (choice) {
-					case 0:
-						new AdminSection(this, db).renderFocus();
-						break;
-
-					case 1:
-						new MovieGoerSection(this, db).renderFocus();
-						break;
-				}
-			},
-			MenuStr.Orientation.Horizontal,
-			"Select module: ",
-			"Admin",
-			"Movie Goer"
-		);
-		attach(menu);
-	}
-
-	@Override
-	public void render() {
-		Console.clear();
-		try (TextColor ignored = new TextColor(Color.RED)) {
-			System.out.println("==================================================");
-			System.out.println("Group 6 - Movie Booking and Listing Management App");
-			System.out.println("==================================================");
-		}
-		menu.render();
-	}
+    Component.loop(() -> {
+      Console.clear();
+      Printer.out("{m,30,0;{c,GREEN;" +
+        "==========================================================\n" +
+        "Group 6 - {c,RED;MO}vie {c,RED;B}ooking and {c,RED;L}isting {c,RED;M}anagement {c,RED;A}pplication\n" +
+        "==========================================================\n}}");
+      return menu;
+    }, SingleMenu.map(
+      () -> AdminSection.exec(db),
+      () -> MovieGoerSection.exec(db)
+    ));
+  }
 }

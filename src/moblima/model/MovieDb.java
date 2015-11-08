@@ -1,71 +1,136 @@
 package moblima.model;
 
-import moblima.util.Pair;
+import util.Pair;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Stream;
 
+/**
+ * The database of all movies.
+ */
 public class MovieDb implements Serializable {
-	private AutoIncrement movieId = new AutoIncrement();
-	private List<Movie> movies = new ArrayList<>();
-	transient ShowTimeDb showTimeDb;
+  transient ShowTimeDb showTimeDb;
+  private AutoIncrement movieId = new AutoIncrement();
+  private List<Movie> movies = new ArrayList<>();
 
-	public MovieDb(ShowTimeDb showTimeDb) {
-		this.showTimeDb = showTimeDb;
-	}
+  /**
+   * Constructs an empty movie database.
+   *
+   * @param showTimeDb the show time database
+   */
+  public MovieDb(ShowTimeDb showTimeDb) {
+    this.showTimeDb = showTimeDb;
+  }
 
-	/**
-	 * Adds a new movie to the list.
-	 *
-	 * @return ID of the newly added movie.
-	 */
-	public int add(Movie movie) {
-		movie.id = movieId.getNext();
-		movies.add(movie);
-		return movie.id;
-	}
+  /**
+   * Adds a new movie to the list.
+   *
+   * @param movie the movie
+   * @return ID of the newly added movie.
+   */
+  public int add(Movie movie) {
+    movie.id = movieId.getNext();
+    movies.add(movie);
+    return movie.id;
+  }
 
-	private int getIndex(int id) {
-		return Collections.binarySearch(movies, new Movie(id));
-	}
+  /**
+   * Returns a stream of top 5 movies by rating.
+   *
+   * @return the stream
+   */
+  public Stream<Movie> top5MoviesByRating() {
+    return movies.stream()
+      .sorted((o1, o2) -> Float.compare(o1.getAverageRating(), o2.getAverageRating()))
+      .limit(5);
+  }
 
-	public Stream<Movie> getTop5ByRating() {
-		return movies.stream()
-			.sorted((o1, o2) -> Float.compare(o1.getAverageRating(), o2.getAverageRating()))
-			.limit(5);
-	}
+  /**
+   * Returns a stream of top 5 movies by sales.
+   *
+   * @return the stream
+   */
+  public Stream<Pair<Movie, Integer>> top5MoviesBySales() {
+    return movies.stream()
+      .map(movie -> new Pair<>(movie, BookingDb.totalSeatCount(showTimeDb.getBookingDb().bookingsForMovie(movie.getId(), showTimeDb))))
+      .sorted((o1, o2) -> Integer.compare(o1.second, o2.second))
+      .limit(5);
+  }
 
-	public Stream<Pair<Movie, Long>> getTop5BySales() {
-		return movies.stream()
-			.map(movie -> new Pair<>(movie, showTimeDb.getBookingDb().getForMovie(movie.getId(), showTimeDb).count()))
-			.sorted((o1, o2) -> Long.compare(o1.getSecond(), o2.getSecond()))
-			.limit(5);
-	}
+  /**
+   * Removes the movie associated with the given ID.
+   *
+   * @param id the id
+   */
+  public void remove(int id) {
+    //remove all show times for this movie
+    showTimeDb.showTimesForMovie(id).map(ShowTime::getId).forEach(showTimeDb::remove);
 
-	public void remove(int id) {
-		int index = getIndex(id);
-		if (index < 0) {
-			return;
-		}
+    movies.remove(id);
+  }
 
-		Movie movie = movies.get(index);
+  /**
+   * Returns the movie associated with the given ID.
+   *
+   * @param id the id
+   * @return the movie
+   */
+  public Movie get(int id) {
+    return movies.get(id);
+  }
 
-		//remove all show times for this movie
-		showTimeDb.getForMovie(id).map(ShowTime::getId).forEach(showTimeDb::remove);
+  /**
+   * Returns a stream of all movies.
+   *
+   * @return the stream
+   */
+  public Stream<Movie> all() {
+    return movies.stream();
+  }
 
-		movies.remove(index);
-	}
+  /**
+   * Returns a streams of all movies available for booking.
+   *
+   * @return the stream
+   */
+  public Stream<Movie> moviesAvailableForBooking() {
+    return all().filter(movie -> movie.getShowingStatus() == Movie.ShowingStatus.NOW_SHOWING ||
+      movie.getShowingStatus() == Movie.ShowingStatus.PREVIEW);
+  }
 
-	public Optional<Movie> get(int id) {
-		int index = getIndex(id);
-		return index < 0 ? Optional.<Movie>empty() : Optional.of(movies.get(index));
-	}
+  /**
+   * Returns a stream of movies whose title contains the given text
+   *
+   * @param partialTitle a part of the movie title
+   * @return the stream
+   */
+  public Stream<Movie> moviesByTitle(String partialTitle) {
+    String lowered = partialTitle.toLowerCase();
+    return moviesAvailableForBooking().filter(movie -> movie.getTitle().toLowerCase().contains(lowered));
+  }
 
-	public Stream<Movie> getAll() {
-		return movies.stream();
-	}
+  /**
+   * Returns a stream of movies starring a cast whose name contains the given text
+   *
+   * @param partialCast a part of the cast name
+   * @return the stream
+   */
+  public Stream<Movie> moviesByCast(String partialCast) {
+    String lowered = partialCast.toLowerCase();
+    return moviesAvailableForBooking().filter(movie -> movie.getCasts().toLowerCase().contains(lowered));
+  }
+
+  /**
+   * Returns a stream of movies directed by a director whose name contains the given text
+   *
+   * @param partialDirector a part of the director name
+   * @return the stream
+   */
+  public Stream<Movie> moviesByDirector(String partialDirector) {
+    String lowered = partialDirector.toLowerCase();
+    return moviesAvailableForBooking().filter(movie -> movie.getDirector().toLowerCase().contains(lowered));
+  }
+
 }

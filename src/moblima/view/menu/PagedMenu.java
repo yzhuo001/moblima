@@ -1,94 +1,86 @@
 package moblima.view.menu;
 
-import jni.Console;
 import jni.Key;
-import jni.TextColor;
-import moblima.util.Calc;
 import moblima.view.Component;
-import moblima.view.SimpleComponent;
-import moblima.view.Util;
+import util.Pair;
 
-import java.util.function.BiConsumer;
+import java.util.List;
 
-public class PagedMenu extends Menu<SimpleComponent> {
-	private final int itemsPerPage;
-	private final int pageCount;
-	private BiConsumer<Integer, SimpleComponent> onAccept;
-	private int start;
-	private int end;
-	private int page = -1;
+/**
+ * {@code PagedMenu} divides the list of options into pages. It returns returns a pair
+ * {@code (selected option index, selected option)} when accepted.
+ *
+ * @param <OptionType> the of all options
+ */
+public class PagedMenu<OptionType> extends Component<Pair<Integer, OptionType>> {
+  private final int optionsPerPage;
+  private final String message;
+  private final List<OptionType> options;
+  private SingleMenu<OptionType> menu;
+  private int page;
 
-	public PagedMenu(Component parent, BiConsumer<Integer, SimpleComponent> onAccept, int itemsPerPage, SimpleComponent[] options) {
-		super(parent, options, Key.UP, Key.DOWN);
-		this.itemsPerPage = itemsPerPage;
-		this.pageCount = options.length / itemsPerPage + 1;
-		this.onAccept = onAccept;
-		setPage(0);
-	}
+  /**
+   * Constructs a new paged menu with no parent.
+   *
+   * @param optionsPerPage the number of options to display per page
+   * @param message        the message to display before the list of options
+   * @param options        the options
+   */
+  public PagedMenu(int optionsPerPage, String message, List<OptionType> options) {
+    this(null, optionsPerPage, message, options);
+  }
 
-	public void render() {
-		renderer.run(() -> {
-			if (options.length <= 0) {
-				Util.pause("No entries found");
-				cancel();
-				return;
-			}
+  /**
+   * Constructs a new paged menu with a parent.
+   *
+   * @param parent         the parent {@link Component}
+   * @param optionsPerPage the number of options to display per page
+   * @param message        the message to display before the list of options
+   * @param options        the options
+   */
+  public PagedMenu(Component parent, int optionsPerPage, String message, List<OptionType> options) {
+    super(parent);
+    this.optionsPerPage = optionsPerPage;
+    this.message = message;
+    this.options = options;
+    setPage(0);
+  }
 
-			Util.printCenter(String.format("Page %d/%d (entry %d/%d)", page + 1, pageCount, end, options.length));
+  /**
+   * Creates a new {@code SingleMenu} representing the given page.
+   */
+  private void setPage(int nextPage) {
+    int totalPage = options.size() / optionsPerPage + 1;
+    page = Math.floorMod(nextPage, totalPage);
+    int start = page * optionsPerPage;
+    int end = Math.min(start + optionsPerPage, options.size());
+    if (menu != null) {
+      menu.close();
+    }
+    menu = new SingleMenu<>(
+      this,
+      Menu.Orientation.Vertical,
+      String.format("%s. Page %d/%d (entry %d/%d)", message, page + 1, totalPage, start + 1, options.size()),
+      options.subList(start, end)
+    );
 
-			for (int i = start; i < end; ++i) {
-				if (i == active) {
-					Console.BufferInfo startPos = Console.getBufferInfo();
-					options[i].render();
-					Console.BufferInfo endPos = Console.getBufferInfo();
+    menu.onFinished(this::setResult);
+  }
 
-					try (TextColor ignored = i == active ? new TextColor(ACTIVE_FG, ACTIVE_BG) : null) {
-						Console.clear(startPos.cursorX, startPos.cursorY, -1, endPos.cursorY - startPos.cursorY);
-						options[i].render();
-					}
-				} else {
-					options[i].render();
-				}
-				System.out.println("-----------------------");
-			}
-		});
-	}
+  @Override
+  public boolean handleKey(char c) {
+    switch (c) {
+      case Key.PAGE_DOWN:
+        setPage(page + 1);
+        render();
+        return true;
 
-	@Override
-	protected int clampActive(int active) {
-		return Calc.clamp(active, start, end - 1);
-	}
+      case Key.PAGE_UP:
+        setPage(page - 1);
+        render();
+        return true;
+    }
 
-	private void setPage(int nextPage) {
-		nextPage = Calc.clamp(nextPage, 0, pageCount - 1);
-		this.page = nextPage;
-		start = itemsPerPage * nextPage;
-		active = start;
-		end = Math.min(start + itemsPerPage, options.length);
-	}
-
-	@Override
-	public boolean doOnKey(char c) {
-		if (super.doOnKey(c)) {
-			return true;
-		}
-
-		switch (c) {
-			case Key.ENTER:
-				this.onAccept.accept(active, options[active]);
-				break;
-
-			case Key.PAGE_DOWN:
-				setPage(page + 1);
-				this.render();
-				break;
-
-			case Key.PAGE_UP:
-				setPage(page - 1);
-				this.render();
-				break;
-		}
-
-		return false;
-	}
+    return false;
+  }
 }

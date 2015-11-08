@@ -91,7 +91,7 @@ std::pair<int, int> charToVk(jchar ch)
 	return std::make_pair(vk, modifier);
 }
 
-jboolean __stdcall Java_jni_Console_charPressed(JNIEnv*, jclass, jchar ch)
+jboolean __stdcall Java_jni_Console_isKeyDown(JNIEnv*, jclass, jchar ch)
 {
 	auto vk_modifier_pair = charToVk(ch);
 	
@@ -153,4 +153,28 @@ void __stdcall Java_jni_Console_scrollWindow(JNIEnv*, jclass, jint deltaX, jint 
 	window_rect.Left = static_cast<short>(std::max(window_rect.Left + deltaX, 0l));        
 	window_rect.Right = static_cast<short>(window_rect.Right + deltaX);
 	SetConsoleWindowInfo(stdout_handle(), TRUE, &window_rect);
+}
+
+
+JavaVM* jvm;
+
+BOOL __stdcall handler_routine(DWORD dwCtrlType)
+{
+	if (dwCtrlType == CTRL_CLOSE_EVENT || dwCtrlType == CTRL_C_EVENT) {
+		JNIEnv *env;
+		jvm->AttachCurrentThread(reinterpret_cast<void **>(&env), &env);
+		auto cls = env->FindClass("jni/Console");
+		auto method_id = env->GetStaticMethodID(cls, "handleClosing", "()V");
+		env->CallStaticVoidMethod(cls, method_id);
+		jvm->DetachCurrentThread();
+		return TRUE;
+	}
+
+	return FALSE;
+}
+
+void __stdcall Java_jni_Console_init(JNIEnv* env, jclass)
+{
+	env->GetJavaVM(&jvm);
+	SetConsoleCtrlHandler(handler_routine, TRUE);
 }

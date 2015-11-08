@@ -4,40 +4,77 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The database for MOBLIMA.
+ */
 public class Database implements Serializable {
-	private Admin admin = new Admin("admin", "");
-	private BookingDb bookingDb = new BookingDb();
-	private ShowTimeDb showTimeDb = new ShowTimeDb(bookingDb);
-	private MovieDb movieDb = new MovieDb(showTimeDb);
-	private TicketPrice ticketPrice = new TicketPrice(20);
-	private List<Cineplex> cineplexes = new ArrayList<>();
+  private Admin admin = new Admin("a", "");
+  private BookingDb bookingDb = new BookingDb();
+  private ShowTimeDb showTimeDb = new ShowTimeDb(bookingDb);
+  private MovieDb movieDb = new MovieDb(showTimeDb);
+  private TicketPrice ticketPrice = new TicketPrice(20);
+  private List<Cineplex> cineplexes = new ArrayList<>();
 
-	public void wakeUp() {
-		showTimeDb.bookingDb = bookingDb;
-		movieDb.showTimeDb = showTimeDb;
-	}
+  /**
+   * The method is to be called when the {@code Database} is deserialized to initialize the missing objects due to
+   * serialization
+   */
+  public void wakeUp() {
+    showTimeDb.bookingDb = bookingDb;
+    movieDb.showTimeDb = showTimeDb;
+  }
 
-	public Admin getAdmin() {
-		return admin;
-	}
+  /**
+   * Gets the admin.
+   *
+   * @return the admin
+   */
+  public Admin getAdmin() {
+    return admin;
+  }
 
-	public BookingDb getBookingDb() {
-		return bookingDb;
-	}
+  /**
+   * Gets the booking database.
+   *
+   * @return the booking database
+   */
+  public BookingDb getBookingDb() {
+    return bookingDb;
+  }
 
-	public ShowTimeDb getShowTimeDb() {
-		return showTimeDb;
-	}
+  /**
+   * Gets the show time database.
+   *
+   * @return the show time database
+   */
+  public ShowTimeDb getShowTimeDb() {
+    return showTimeDb;
+  }
 
-	public MovieDb getMovieDb() {
-		return movieDb;
-	}
+  /**
+   * Gets the movie database
+   *
+   * @return the movie database
+   */
+  public MovieDb getMovieDb() {
+    return movieDb;
+  }
 
-	public TicketPrice getTicketPrice() {
-		return ticketPrice;
-	}
+  /**
+   * Gets ticket price database.
+   *
+   * @return the ticket price database
+   */
+  public TicketPrice getTicketPrice() {
+    return ticketPrice;
+  }
 
-	public List<Cineplex> getCineplexes() {
-		return cineplexes;
-	}
+  /**
+   * Gets list of all cineplexes.
+   *
+   * @return list of all cineplexes
+   */
+  public List<Cineplex> getCineplexes() {
+    return cineplexes;
+  }
 }
