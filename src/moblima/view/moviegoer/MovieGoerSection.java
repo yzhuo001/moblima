@@ -46,13 +46,14 @@ public class MovieGoerSection {
 
   private static void displayMovieList(Database db, String message, Stream<Movie> movieStream) {
     List<MoviePrinter> printers = movieStream.map(MoviePrinter::new).collect(Collectors.toList());
-    PagedMenu<MoviePrinter> menu = new PagedMenu<>(
-      4,
-      message,
-      printers
-    );
 
     if (printers.size() > 0) {
+      PagedMenu<MoviePrinter> menu = new PagedMenu<>(
+        4,
+        message,
+        printers
+      );
+
       Component.loop(
         () -> { Console.clear(); return menu; },
         r -> displayMovieMenu(db, r.second.getMovie())
@@ -106,11 +107,18 @@ public class MovieGoerSection {
       }),
 
 
-      () -> new PagedMenu<>(
-        5,
-        "Reviews for " + movie,
-        movie.getReviews().stream().map(ReviewPrinter::new).collect(Collectors.toList())
-      ).exec()
+      () -> {
+        List<ReviewPrinter> printers = movie.getReviews().stream().map(ReviewPrinter::new).collect(Collectors.toList());
+        if (printers.size() == 0) {
+          Util.pause("There are no reviews for this movie", true);
+        } else {
+          new PagedMenu<>(
+            5,
+            "Reviews for " + movie,
+            printers
+          ).exec();
+        }
+      }
     ));
   }
 
