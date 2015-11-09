@@ -5,7 +5,9 @@ import moblima.model.MovieDb;
 import moblima.model.ShowTime;
 
 import java.time.LocalDateTime;
+import java.time.format.TextStyle;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * {@code ShowTimePrinter} prints a {@link ShowTime} to a formatting string which can then be printed by {@link Printer}.
@@ -45,8 +47,9 @@ public class ShowTimePrinter {
   @Override
   public String toString() {
     LocalDateTime startTime = showTime.getStartTime();
-    return String.format("%s %d-%s-%d %d:%d at %s",
+    return String.format("%s %s %d-%s-%d %d:%d at %s",
       movie,
+      startTime.getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.ENGLISH),
       startTime.getDayOfMonth(),
       startTime.getMonth(),
       startTime.getYear(),

@@ -60,7 +60,7 @@ public class PagedMenu<OptionType> extends Component<Pair<Integer, OptionType>> 
     menu = new SingleMenu<>(
       this,
       Menu.Orientation.Vertical,
-      String.format("%s. Page %d/%d (entry %d/%d)", message, page + 1, totalPage, start + 1, options.size()),
+      String.format("%s. Page %d/%d (entry %d/%d)", message, page + 1, totalPage, end, options.size()),
       options.subList(start, end)
     );
 

@@ -2,13 +2,14 @@ package moblima.view.admin;
 
 import jni.Console;
 import moblima.model.Database;
-import moblima.view.Component;
-import moblima.view.LineEdit;
-import moblima.view.Printer;
+import moblima.view.*;
 import moblima.view.menu.Menu;
+import moblima.view.menu.PagedMenu;
 import moblima.view.menu.SingleMenu;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * {@code AdminSection} authenticates the administrator and displays a list of sub-sections for the administrator to manage.

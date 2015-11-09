@@ -38,14 +38,16 @@ public class MovieGoerSection {
       Console.clear();
       return menu;
     }, SingleMenu.map(
-      () -> displayMovieList(db, "Movies available for booking", db.getMovieDb().moviesAvailableForBooking()),
+      () -> displayMovieList(db, "Movies available for booking", db.getMovieDb().all()),
       () -> search(db),
       () -> displayBookingHistory(db.getBookingDb(), db.getShowTimeDb(), db.getMovieDb(), db.getCineplexes())
     ));
   }
 
   private static void displayMovieList(Database db, String message, Stream<Movie> movieStream) {
-    List<MoviePrinter> printers = movieStream.map(MoviePrinter::new).collect(Collectors.toList());
+    List<MoviePrinter> printers = movieStream
+      .filter(movie -> movie.getShowingStatus() != Movie.ShowingStatus.END_OF_SHOWING)
+      .map(MoviePrinter::new).collect(Collectors.toList());
 
     if (printers.size() > 0) {
       PagedMenu<MoviePrinter> menu = new PagedMenu<>(
@@ -56,10 +58,15 @@ public class MovieGoerSection {
 
       Component.loop(
         () -> { Console.clear(); return menu; },
-        r -> displayMovieMenu(db, r.second.getMovie())
+        r -> {
+          Movie movie = r.second.getMovie();
+          if (movie.getShowingStatus() != Movie.ShowingStatus.COMING_SOON) {
+            displayMovieMenu(db, movie);
+          }
+        }
       );
     } else {
-      Util.pause("No entries found");
+      Util.pause("No movies found", true);
     }
   }
 

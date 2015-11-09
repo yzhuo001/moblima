@@ -2,7 +2,9 @@ package moblima.view;
 
 import jni.Color;
 import moblima.model.Movie;
+import util.Pair;
 
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -10,6 +12,7 @@ import java.util.stream.Collectors;
  */
 public class MoviePrinter {
   private Movie movie;
+  private Integer sales;
 
   /**
    * Constructs the printer with a {@link Movie} to print.
@@ -18,6 +21,17 @@ public class MoviePrinter {
    */
   public MoviePrinter(Movie movie) {
     this.movie = movie;
+    sales = null;
+  }
+
+  /**
+   * Constructs a new printer with a {@link Movie} and its sales number to print.
+   *
+   * @param movieSalesPair a pair of the movie and its sales number
+   */
+  public MoviePrinter(Pair<Movie, Integer> movieSalesPair) {
+    movie = movieSalesPair.first;
+    sales = movieSalesPair.second;
   }
 
   /**
@@ -46,12 +60,18 @@ public class MoviePrinter {
     }
 
     str.append(String.format("{c,BLACK,%s;%s}", showingStatusBg, movie.getShowingStatus()));
-    str.append(String.format("%3c%s", ' ', movie.getTitle().toUpperCase()));
-    float rating = movie.getAverageRating();
-    str.append(String.format("{c,MAGENTA;%3c%s}\n", ' ', Float.isNaN(rating) ? "No ratings yet" : String.format("Average rating: %.1f", rating)));
+    str.append(String.format("   %s", movie.getTitle().toUpperCase()));
+    Optional<Float> rating = movie.getAverageRating();
+    str.append(String.format("{c,MAGENTA;   Average rating: %s}",
+      rating.isPresent() ? String.format("%.1f", rating.get()) : "N/A"));
+
+    if (sales != null) {
+      str.append(String.format("    {c,CYAN; Sales: %d}", sales));
+    }
+    str.append('\n');
 
     str.append(movie.getClassification());
-    str.append(String.format(" | %d min |", movie.getLength()));
+    str.append(String.format(" | %d min | ", movie.getLength()));
     str.append(String.join(", ", movie.getGenres().stream().map(Object::toString).collect(Collectors.toList())));
     str.append("\n\n");
 

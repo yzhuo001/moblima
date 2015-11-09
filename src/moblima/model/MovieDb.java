@@ -43,19 +43,19 @@ public class MovieDb implements Serializable {
    */
   public Stream<Movie> top5MoviesByRating() {
     return movies.stream()
-      .sorted((o1, o2) -> Float.compare(o1.getAverageRating(), o2.getAverageRating()))
+      .sorted((o1, o2) -> Float.compare(o2.getAverageRating().orElse(-1.f), o1.getAverageRating().orElse(-1.f))) //descending
       .limit(5);
   }
 
   /**
    * Returns a stream of top 5 movies by sales.
    *
-   * @return the stream
+   * @return the stream of pair (movie, sales)
    */
   public Stream<Pair<Movie, Integer>> top5MoviesBySales() {
     return movies.stream()
       .map(movie -> new Pair<>(movie, BookingDb.totalSeatCount(showTimeDb.getBookingDb().bookingsForMovie(movie.getId(), showTimeDb))))
-      .sorted((o1, o2) -> Integer.compare(o1.second, o2.second))
+      .sorted((o1, o2) -> Integer.compare(o2.second, o1.second)) //descending
       .limit(5);
   }
 
@@ -91,16 +91,6 @@ public class MovieDb implements Serializable {
   }
 
   /**
-   * Returns a streams of all movies available for booking.
-   *
-   * @return the stream
-   */
-  public Stream<Movie> moviesAvailableForBooking() {
-    return all().filter(movie -> movie.getShowingStatus() == Movie.ShowingStatus.NOW_SHOWING ||
-      movie.getShowingStatus() == Movie.ShowingStatus.PREVIEW);
-  }
-
-  /**
    * Returns a stream of movies whose title contains the given text
    *
    * @param partialTitle a part of the movie title
@@ -108,7 +98,7 @@ public class MovieDb implements Serializable {
    */
   public Stream<Movie> moviesByTitle(String partialTitle) {
     String lowered = partialTitle.toLowerCase();
-    return moviesAvailableForBooking().filter(movie -> movie.getTitle().toLowerCase().contains(lowered));
+    return all().filter(movie -> movie.getTitle().toLowerCase().contains(lowered));
   }
 
   /**
@@ -119,7 +109,7 @@ public class MovieDb implements Serializable {
    */
   public Stream<Movie> moviesByCast(String partialCast) {
     String lowered = partialCast.toLowerCase();
-    return moviesAvailableForBooking().filter(movie -> movie.getCasts().toLowerCase().contains(lowered));
+    return all().filter(movie -> movie.getCasts().toLowerCase().contains(lowered));
   }
 
   /**
@@ -130,7 +120,7 @@ public class MovieDb implements Serializable {
    */
   public Stream<Movie> moviesByDirector(String partialDirector) {
     String lowered = partialDirector.toLowerCase();
-    return moviesAvailableForBooking().filter(movie -> movie.getDirector().toLowerCase().contains(lowered));
+    return all().filter(movie -> movie.getDirector().toLowerCase().contains(lowered));
   }
 
 }

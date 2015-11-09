@@ -73,9 +73,11 @@ public class BookTicket {
         Console.clear();
         renderBookingSummary(showTime[0], db.getMovieDb(), movie.getGenres(), db.getCineplexes(), seats[0], db.getTicketPrice(), customer[0]);
         return confirm.exec();
-      })
-      .flatMap(i -> LineEdit.get("Enter your credit card number: "))
-      .ifPresent(i -> completeBooking(db.getBookingDb(), showTime[0], seats[0], customer[0]));
+      }).ifPresent(SingleMenu.map(
+        () -> LineEdit.get("Enter your credit card number: ")
+              .ifPresent(i -> completeBooking(db.getBookingDb(), showTime[0], seats[0], customer[0])),
+        () -> {}
+      ));
   }
 
   private static Optional<Customer> inputCustomer(Movie movie) {
@@ -113,7 +115,7 @@ public class BookTicket {
     System.out.printf("%-20s: %s\n", "Show time", new ShowTimePrinter(showTime, cineplexes, movieDb));
     System.out.printf("%-20s: %s\n", "Seat(s)", seats.stream().map(Cinema::seatName).collect(Collectors.joining(", ")));
     Printer.outf(
-      "%-20s: {c,RED;%.1f}\n",
+      "%-20s: {c,RED;%.1f} SGD (GST included)\n",
       "Total price",
       totalPrice
     );

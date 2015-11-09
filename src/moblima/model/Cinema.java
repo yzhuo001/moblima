@@ -67,8 +67,11 @@ public class Cinema implements Serializable {
    * @return the iterator
    */
   public static Iterator<Pair<Integer, Integer>> layoutIterator(int start, int end, boolean inclSpace) {
+    while (start > 0 && LAYOUT.at(start) < 1) --start;
+
+    final int finalStart = start;
     return new Iterator<Pair<Integer, Integer>>() {
-      int idx = start;
+      int idx = finalStart;
 
       private int computeNext() {
         if (idx >= end) {
@@ -96,9 +99,8 @@ public class Cinema implements Serializable {
 
       @Override
       public Pair<Integer, Integer> next() {
-        Pair<Integer, Integer> result = new Pair<>(idx, LAYOUT.at(idx));
         idx = computeNext();
-        return result;
+        return new Pair<>(idx, LAYOUT.at(idx));
       }
     };
   }
