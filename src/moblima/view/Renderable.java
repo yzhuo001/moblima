@@ -3,7 +3,6 @@ package moblima.view;
 /**
  * The {@code Renderable} interface represents minimum requirement for a view object.
  * A view object can be requested to render itself on the screen through calls to {@link #render()}.
- * This interface is a functional interface for convenience.
  */
 @FunctionalInterface
 public interface Renderable {

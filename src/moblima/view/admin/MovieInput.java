@@ -10,7 +10,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
- * Provides view methods for editing a {@link Movie} object
+ * {@code MovieInput} provides view methods for editing a {@link Movie} object.
  */
 public class MovieInput extends Input<Movie> {
   private Movie movie;

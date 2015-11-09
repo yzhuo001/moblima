@@ -19,7 +19,8 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
- * {@code SeatLayout} displays the seat layout of a cinema and allows the user to select seats by using the left/right arrow.
+ * {@code SeatLayout} displays the seat layout for a cinema and allows the user to select seats by using the left/right arrow.
+ * It returns a list of selected seats as a result of execution.
  */
 public class SeatLayout extends Component<List<Integer>> {
   private static final int CELL_WIDTH = 3;

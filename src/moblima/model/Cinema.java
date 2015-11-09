@@ -8,7 +8,7 @@ import java.io.Serializable;
 import java.util.Iterator;
 
 /**
- * Represents all information associated with a cinema: name, rank, and layout.
+ * {@code Cinema} represents all information associated with a cinema: name, rank, and layout.
  */
 public class Cinema implements Serializable {
   private static final int P = -1; //padding

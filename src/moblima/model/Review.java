@@ -3,7 +3,7 @@ package moblima.model;
 import java.io.Serializable;
 
 /**
- * Represents a review for a movie.
+ * {@code Review} represents a review made by a movie-goer.
  */
 public class Review implements Serializable {
   /**

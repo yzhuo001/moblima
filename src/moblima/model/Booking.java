@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 /**
- * Represents a booking made by user.
+ * {@code Booking} represents a booking made by user.
  * Once created, this object cannot be modified.
  */
 public class Booking implements Serializable {

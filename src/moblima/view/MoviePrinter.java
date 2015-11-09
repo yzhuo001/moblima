@@ -30,7 +30,6 @@ public class MoviePrinter {
   }
 
   /**
-   *
    * Prints the {@code movie} to a string.
    *
    * @return the formatting string

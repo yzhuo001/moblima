@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Represents a cineplex.
+ * {@code Cineplex} stores all data related to a cineplex.
  */
 public class Cineplex implements Serializable {
   private int id;

@@ -5,7 +5,7 @@ import moblima.view.Printer;
 import util.Strings;
 
 /**
- * Prints a {@link Review} to a formatting string which can then be printed by {@link Printer}.
+ * {@code ReviewPrinter} prints a {@link Review} to a formatting string which can then be printed by {@link Printer}.
  */
 public class ReviewPrinter {
   private Review review;

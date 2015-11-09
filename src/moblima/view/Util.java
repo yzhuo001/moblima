@@ -4,7 +4,7 @@ import jni.Color;
 import jni.Console;
 
 /**
- * A namespace for all utilities.
+ * A namespace for all view utilities.
  */
 public class Util {
   /**
@@ -44,7 +44,7 @@ public class Util {
    *
    * @param message the message
    * @param isError {@code true} if {@code message} is an error message,
-   *                            or {@code false} if {@code message} is a successful message
+   *                or {@code false} if {@code message} is a successful message
    */
   public static void pause(String message, boolean isError) {
     String color = (isError ? Color.RED : Color.GREEN).toString();

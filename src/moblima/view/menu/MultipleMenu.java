@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 /**
  * A {@code MultipleMenu} is a {@link Menu} which allows the user to select more than one option. The user selects an
  * option by pressing SPACE and accepts the selected options by pressing ENTER.
- *
+ * <p>
  * {@code MultipleMenu} returns a list of pairs (selected option index, selected option)
  *
  * @param <OptionType> the type of all options

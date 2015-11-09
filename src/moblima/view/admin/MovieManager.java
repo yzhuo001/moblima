@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * The movie manager screen.
+ * {@code MovieManager} is the screen for managing {@link MovieDb}.
  */
 public class MovieManager {
   /**

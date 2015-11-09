@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 /**
- * Prints a {@link ShowTime} to a formatting string which can be printed by {@link Printer}.
+ * {@code ShowTimePrinter} prints a {@link ShowTime} to a formatting string which can then be printed by {@link Printer}.
  */
 public class ShowTimePrinter {
   private String movie;

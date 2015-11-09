@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 /**
- * {@code Printer} supports printing text with color and margin.
+ * {@code Printer} supports printing text on the {@link Console} screen with color and margin.
  */
 public class Printer {
   static private final Pattern FORMAT = Pattern.compile("\\{(c|m),(.+?);(.+)}", Pattern.MULTILINE | Pattern.DOTALL);

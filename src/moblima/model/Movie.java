@@ -7,6 +7,9 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 
+/**
+ * {@code Movie} represents a movie in the database.
+ */
 public class Movie implements Serializable, Comparable<Movie> {
   int id;
   private String title;

@@ -11,10 +11,10 @@ import java.util.function.Supplier;
 
 
 /**
- * The {@code Component} class is the base class of all view objects. The {@code Component} can receive keyboard event
- * from the {@code Console} as well as render itself on the {@code Console} screen.
+ * The {@code Component} class is the base class of all view objects. A {@code Component} is responsible for
+ * handling key events from the {@link Console} and re-rendering itself accordingly.
  *
- * @param <ResultType> the result type returned by this {@code Component}
+ * @param <ResultType> the result type returned as a result of executing a {@code Component}
  */
 public abstract class Component<ResultType> implements Renderable, AutoCloseable {
   public static final char REJECTING_KEY = Key.ESC;
@@ -33,7 +33,7 @@ public abstract class Component<ResultType> implements Renderable, AutoCloseable
   }
 
   /**
-   * Construct a component which is a child of {@code parent}. Unhandled keyboard events will bubble to {@code parent}.
+   * Construct a component with a parent. Unhandled keyboard events will bubble to the parent.
    *
    * @param parent the parent
    * @see #Component()
@@ -44,8 +44,7 @@ public abstract class Component<ResultType> implements Renderable, AutoCloseable
   }
 
   /**
-   * Loops until the {@code Component} returned by {@code componentFn} is rejected or is null. {@code handler} will
-   * be executed each time the {@code Component} is accepted.
+   * Loops until the returned {@code Component} is rejected or is null.
    *
    * @param <R>         the {@code ResultType} of the {@code Component} returned by {@code componentFn}
    * @param componentFn a function returning a {@code Component}
@@ -135,7 +134,7 @@ public abstract class Component<ResultType> implements Renderable, AutoCloseable
   }
 
   /**
-   * The method will be called right before this {@code Component} enters the keyboard loop.
+   * The method will be called just before this {@code Component} enters the keyboard loop.
    * Subclasses can re-implement this method to render itself and/or as an opportunity to stop the loop before
    * it is entered by setting the result of this {@code Component}.
    * <p>
@@ -163,8 +162,8 @@ public abstract class Component<ResultType> implements Renderable, AutoCloseable
   /**
    * Executes the keyboard loop for this component. This is a blocking operation.
    *
-   * @return The result of executing this {@code Component} or an empty {@link Optional} if this {@code Component}
-   * is rejected.
+   * @return An {@link Optional} object describing the result of executing this {@code Component}
+   * or an empty {@link Optional} if this {@code Component} is rejected.
    */
   public final Optional<ResultType> exec() {
     result = null;
@@ -213,7 +212,7 @@ public abstract class Component<ResultType> implements Renderable, AutoCloseable
   }
 
   /**
-   * Executes {@code listener} when the result of this {@code Component} is set.
+   * Executes {@code listener} when the result of executing this {@code Component} is set.
    *
    * @param listener the listener
    */

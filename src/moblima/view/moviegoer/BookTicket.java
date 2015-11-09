@@ -16,12 +16,13 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * The ticket booking screen.
+ * {@code BookTicket} represents the ticket booking screen.
  */
 public class BookTicket {
   /**
    * Displays the screen
-   * @param db the database
+   *
+   * @param db    the database
    * @param movie the movie for which the booking is made
    */
   public static void exec(Database db, Movie movie) {

@@ -16,7 +16,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
- * {@code CreateEdit} provides operations on an {@link Input} to create or edit an entity.
+ * {@code CreateEdit} utilizes an {@link Input} object to create or edit an entity.
  *
  * @param <T> the type of the entity object
  */
@@ -28,7 +28,7 @@ public class CreateEdit<T> {
   /**
    * Constructs a new {@code CreateEdit} on an entity.
    *
-   * @param input the input object for the entity
+   * @param input the {@link Input} object for the entity
    */
   public CreateEdit(Input<T> input) {
     this.input = input;
@@ -77,7 +77,7 @@ public class CreateEdit<T> {
 
   /**
    * Displays a list of editable properties of the entity and calls the corresponding method in the
-   * input object to edit the property.
+   * {@link Input} object to edit the property.
    *
    * @param name a function taking the entity object and returning a short representation of the object
    */

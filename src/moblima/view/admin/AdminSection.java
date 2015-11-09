@@ -11,7 +11,7 @@ import moblima.view.menu.SingleMenu;
 import java.util.Optional;
 
 /**
- * Authenticates the administrator and allows the administrator to select a sub-section to manage.
+ * {@code AdminSection} authenticates the administrator and displays a list of sub-sections for the administrator to manage.
  */
 public class AdminSection {
   /**

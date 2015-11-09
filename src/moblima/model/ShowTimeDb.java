@@ -8,7 +8,7 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 /**
- * The database of all added show times.
+ * {@code ShowTime} is the database for all added show times.
  */
 public class ShowTimeDb implements Serializable {
   transient BookingDb bookingDb;

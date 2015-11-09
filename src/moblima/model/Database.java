@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The database for MOBLIMA.
+ * {@code Database} is the central database for MOBLIMA.
  */
 public class Database implements Serializable {
   private Admin admin = new Admin("a", "");

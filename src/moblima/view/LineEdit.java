@@ -11,8 +11,9 @@ import java.util.concurrent.ExecutionException;
 import java.util.function.Function;
 
 /**
- * The {@code LineEdit} class is a one-line text-editor. Unlike {@link Scanner}, {@code LineEdit} can be interrupted.
- * {@code LineEdit} is also configurable to validate user input and transform the entered string to an arbitrary type.
+ * {@code LineEdit} is a one-line text-editor. Unlike a {@link Scanner}, a {@code LineEdit} can be interrupted by pressing
+ * the {@link Component#REJECTING_KEY}.
+ * A {@code LineEdit} is also configurable to validate user input and transform the entered string to an arbitrary type.
  */
 public class LineEdit {
   private static Optional<String> nextLine() {
@@ -42,15 +43,15 @@ public class LineEdit {
   }
 
   /**
-   * Gets the next string entered by the user and transforms it to an arbitrary type.
+   * Gets the next string entered by the user, validates and transforms it to an arbitrary type.
    *
-   * @param <R>         the desired type
-   * @param label      the label displayed before the editor.
+   * @param <R>          the desired type
+   * @param label        the label displayed before the editor.
    * @param transform    a function taking the entered string, validating and transforming it to the desired type {@code R}.
    *                     It returns a pair {@code (transformed value, error string)}.
-   *                     If {@code error string} is not {@code null}, it will be displayed and the user will be asked to
+   *                     If the {@code error string} is not {@code null}, it will be displayed and the user will be asked to
    *                     enter the value again until {@code error string} is {@code null}.
-   *                     {@code transformed value} will be returned when the entered value is valid.
+   *                     The {@code transformed value} will be returned when the entered value is valid.
    * @param initialValue the initial value of the editor.
    * @return an {@link Optional} describing the transformed value or an empty {@code Optional} if the editor is rejected.
    */
@@ -97,14 +98,14 @@ public class LineEdit {
   /**
    * Gets the next validated string.
    *
-   * @param label  the label displayed before the editor
-   * @param validate a function taking the entered string and returning null if the value is valid or an error string
-   *                 explaining why the value is not acceptable.
+   * @param label        the label displayed before the editor
+   * @param validate     a function taking the entered string and returning null if the value is valid or an error string
+   *                     explaining why the value is not acceptable.
    * @param initialValue the initial value of the editor
    * @return an {@link Optional} describing the validated string or an empty {@code Optional} if the editor is rejected.
    */
   public static Optional<String> getValid(String label, Function<String, String> validate, String initialValue) {
-    return get(label, line -> new Pair<>(line, validate.apply(line)), null);
+    return get(label, line -> new Pair<>(line, validate.apply(line)), initialValue);
   }
 
   /**
@@ -117,7 +118,7 @@ public class LineEdit {
   /**
    * Get the next entered string without any validation and transformation
    *
-   * @param label  the label displayed before the editor
+   * @param label        the label displayed before the editor
    * @param initialValue the initial value of the editor
    * @return an {@link Optional} describing the entered string or an empty {@code Optional} if the editor is rejected.
    */

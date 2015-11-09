@@ -1,10 +1,28 @@
 package util;
 
+/**
+ * {@code Pair} represents a pair of values.
+ *
+ * @param <First>  the type of the first value
+ * @param <Second> the type of the second value
+ */
 public class Pair<First, Second> {
 
+  /**
+   * The first value.
+   */
   public First first;
+  /**
+   * The second value.
+   */
   public Second second;
 
+  /**
+   * Constructs a new pair.
+   *
+   * @param first  the first value
+   * @param second the second value
+   */
   public Pair(First first, Second second) {
     this.first = first;
     this.second = second;

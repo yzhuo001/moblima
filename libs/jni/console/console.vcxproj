@@ -165,7 +165,7 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /y /idx $(OutDir)$(TargetFileName) $(SolutionDir)..\..\bin\$(TargetName)-x64$(TargetExt)</Command>
+      <Command>copy /Y $(OutDir)$(TargetFileName) $(SolutionDir)..\..\bin\$(TargetName)-x64$(TargetExt)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

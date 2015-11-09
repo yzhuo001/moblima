@@ -15,7 +15,7 @@ import java.util.HashSet;
 import java.util.Optional;
 
 /**
- * Provides view methods for editing a {@link TicketPrice} object
+ * {@code ConfigInput} provides view methods for editing a {@link TicketPrice} object
  */
 public class ConfigInput extends Input<TicketPrice> {
   private TicketPrice ticketPrice;
@@ -33,7 +33,6 @@ public class ConfigInput extends Input<TicketPrice> {
    * Displays a {@link LineEdit} to edit the base price.
    *
    * @return A non-empty {@link Optional} if accepted.
-   *
    * @see TicketPrice#setBasePrice(int)
    * @see TicketPrice#getBasePrice()
    */
@@ -54,7 +53,7 @@ public class ConfigInput extends Input<TicketPrice> {
   }
 
   /**
-   * Display a {@link SingleMenu} of all multipliers then a {@link LineEdit} to change the selected multiplier value.
+   * Displays a {@link SingleMenu} of all multipliers then a {@link LineEdit} to change the selected multiplier value.
    *
    * @return A non-empty {@link Optional} if accepted.
    * @see TicketPrice#getMultiplier(TicketPrice.Multiplier)

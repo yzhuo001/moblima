@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 /**
- * The type Show time.
+ * {@code ShowTime} stores all information related to a show time.
  */
 public class ShowTime implements Serializable, Comparable<ShowTime> {
   int id;

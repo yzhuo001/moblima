@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * The show time manager screen.
+ * {@code ShowTimeManager} is the screen for managing the {@link ShowTimeDb}.
  */
 public class ShowTimeManager {
   private ShowTimeDb showTimeDb;

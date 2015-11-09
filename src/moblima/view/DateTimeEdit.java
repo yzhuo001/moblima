@@ -23,8 +23,9 @@ public class DateTimeEdit extends Component<LocalDateTime> {
 
   /**
    * Constructs a date editor with no parent. The value is set to current date time.
-   * @param type     see {@link Type}
-   * @param label  the label displayed before the editor
+   *
+   * @param type  see {@link Type}
+   * @param label the label displayed before the editor
    */
   public DateTimeEdit(Type type, String label) {
     this(type, label, null);
@@ -34,7 +35,7 @@ public class DateTimeEdit extends Component<LocalDateTime> {
    * Constructs a date editor with no parent. The value is set to {@code dateTime}.
    *
    * @param type     see {@link Type}
-   * @param label  the label displayed before the editor
+   * @param label    the label displayed before the editor
    * @param dateTime the starting date time
    */
   public DateTimeEdit(Type type, String label, LocalDateTime dateTime) {
@@ -43,8 +44,9 @@ public class DateTimeEdit extends Component<LocalDateTime> {
 
   /**
    * Constructs a date editor with a parent. The value is set current date time.
-   * @param parent   the parent {@code Component}
-   * @param type     see {@link Type}
+   *
+   * @param parent the parent {@code Component}
+   * @param type   see {@link Type}
    * @param label  the label displayed before the editor
    */
   public DateTimeEdit(Component parent, Type type, String label) {
@@ -56,7 +58,7 @@ public class DateTimeEdit extends Component<LocalDateTime> {
    *
    * @param parent   the parent {@code Component}
    * @param type     see {@link Type}
-   * @param label  the label displayed before the editor
+   * @param label    the label displayed before the editor
    * @param dateTime the starting date time
    */
   public DateTimeEdit(Component parent, Type type, String label, LocalDateTime dateTime) {

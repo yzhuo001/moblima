@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 /**
- * The database all of bookings made by movie goers
+ * {@code BookingDb} is the database all of bookings made by movie goers.
  */
 public class BookingDb implements Serializable {
   private List<Booking> bookings = new ArrayList<>();

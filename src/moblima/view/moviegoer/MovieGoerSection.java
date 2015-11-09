@@ -17,12 +17,12 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 /**
- * The home screen for movie goers
+ * {@code MovieGoerSection} represents the main UI for movie goers.
  */
 public class MovieGoerSection {
 
   /**
-   * Display the screen.
+   * Displays the screen.
    *
    * @param db the database
    */
@@ -46,14 +46,17 @@ public class MovieGoerSection {
 
   private static void displayMovieList(Database db, String message, Stream<Movie> movieStream) {
     List<MoviePrinter> printers = movieStream.map(MoviePrinter::new).collect(Collectors.toList());
+    PagedMenu<MoviePrinter> menu = new PagedMenu<>(
+      4,
+      message,
+      printers
+    );
 
     if (printers.size() > 0) {
-      Console.clear();
-      new PagedMenu<>(
-        4,
-        message,
-        printers
-      ).exec().ifPresent(r -> displayMovieMenu(db, r.second.getMovie()));
+      Component.loop(
+        () -> { Console.clear(); return menu; },
+        r -> displayMovieMenu(db, r.second.getMovie())
+      );
     } else {
       Util.pause("No entries found");
     }

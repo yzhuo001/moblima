@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 /**
- * The database of all movies.
+ * {@code MovieDb} is the database for all added movies.
  */
 public class MovieDb implements Serializable {
   transient ShowTimeDb showTimeDb;

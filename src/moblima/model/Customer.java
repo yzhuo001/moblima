@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.regex.Pattern;
 
 /**
- * The Customer entity object.
+ * {@code Customer} stores the information of a movie-goer when a {@link Booking} is made.
  */
 public class Customer implements Serializable {
   private static final Pattern EMAIL = Pattern.compile("\\b[a-z0-9._%+-]+@[a-z0-9.-]+\\.[A-Z]{2,}\\b", Pattern.CASE_INSENSITIVE);

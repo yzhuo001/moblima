@@ -36,7 +36,7 @@ public abstract class Input<Entity> {
   abstract public Entity get();
 
   /**
-   * {@code Order} specifies order of method calling when an new entity is created. Methods will be called in ascending order.
+   * {@code Order} specifies order in which methods are called when an new entity is created.
    */
   @Retention(RetentionPolicy.RUNTIME)
   public @interface Order {

@@ -12,7 +12,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
- * Provides view methods for editing a {@link ShowTime} object
+ * {@code ShowTimeInput} provides view methods for editing a {@link ShowTime} object.
  */
 class ShowTimeInput extends Input<ShowTime> {
   private final List<Cineplex> cineplexes;
@@ -22,9 +22,9 @@ class ShowTimeInput extends Input<ShowTime> {
   /**
    * Constructs a {@code ShowTimeInput} with a {@link ShowTime} object and other objects needed in editing the {@code ShowTime}.
    *
-   * @param showTime the show time
+   * @param showTime   the show time
    * @param cineplexes the list of cineplexes
-   * @param movieDb the movie database
+   * @param movieDb    the movie database
    */
   public ShowTimeInput(ShowTime showTime, List<Cineplex> cineplexes, MovieDb movieDb) {
     this.showTime = showTime;
