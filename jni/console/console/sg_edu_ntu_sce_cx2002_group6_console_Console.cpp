@@ -1,10 +1,9 @@
 #define NOMINMAX
-#include "jni_Console.h"
+#include "sg_edu_ntu_sce_cx2002_group6_console_Console.h"
 #include <conio.h>
 #include <windows.h>
 #include <algorithm>
 #include <vector>
-#include <iostream>
 
 HANDLE stdout_handle()
 {
@@ -12,29 +11,29 @@ HANDLE stdout_handle()
 	return out;
 }
 
-JNIEXPORT jchar JNICALL Java_jni_Console_getCh(JNIEnv *, jclass)
+JNIEXPORT jchar JNICALL Java_sg_edu_ntu_sce_cx2002_group6_console_Console_getCh(JNIEnv *, jclass)
 {
 	return static_cast<jchar>(_getch());
 }
 
-JNIEXPORT void JNICALL Java_jni_Console_goToXY(JNIEnv *, jclass, jint x, jint y)
+JNIEXPORT void JNICALL Java_sg_edu_ntu_sce_cx2002_group6_console_Console_goToXY(JNIEnv *, jclass, jint x, jint y)
 {
 	SetConsoleCursorPosition(stdout_handle(), COORD{static_cast<short>(x), static_cast<short>(y)});
 }
 
-jint __stdcall Java_jni_Console_getTextAttribute(JNIEnv*, jclass)
+jint __stdcall Java_sg_edu_ntu_sce_cx2002_group6_console_Console_getTextAttribute(JNIEnv*, jclass)
 {
 	CONSOLE_SCREEN_BUFFER_INFO buffer_info;
 	GetConsoleScreenBufferInfo(stdout_handle(), &buffer_info);
 	return buffer_info.wAttributes;
 }
 
-void __stdcall Java_jni_Console_setTextAttribute(JNIEnv*, jclass, jint attr)
+void __stdcall Java_sg_edu_ntu_sce_cx2002_group6_console_Console_setTextAttribute(JNIEnv*, jclass, jint attr)
 {
 	SetConsoleTextAttribute(stdout_handle(), static_cast<WORD>(attr));
 }
 
-void __stdcall Java_jni_Console_clear(JNIEnv*, jclass, jint x, jint y, jint width, jint height)
+void __stdcall Java_sg_edu_ntu_sce_cx2002_group6_console_Console_clear(JNIEnv*, jclass, jint x, jint y, jint width, jint height)
 {
 	COORD home_coord = {static_cast<short>(x), static_cast<short>(y)};
 
@@ -63,12 +62,12 @@ void __stdcall Java_jni_Console_clear(JNIEnv*, jclass, jint x, jint y, jint widt
 	SetConsoleCursorPosition(stdout_handle(), home_coord);
 }
 
-jobject __stdcall Java_jni_Console_getBufferInfo(JNIEnv* env, jclass)
+jobject __stdcall Java_sg_edu_ntu_sce_cx2002_group6_console_Console_getBufferInfo(JNIEnv* env, jclass)
 {
-	auto std_out = GetStdHandle(STD_OUTPUT_HANDLE);
+	auto std_out = stdout_handle;
 	CONSOLE_SCREEN_BUFFER_INFO buffer_info;
 	GetConsoleScreenBufferInfo(std_out, &buffer_info);
-	auto cls = env->FindClass("jni/Console$BufferInfo");
+	auto cls = env->FindClass("sg/edu/ntu/sce/cx2002/group6/console/Console$BufferInfo");
 	auto constructor = env->GetMethodID(cls, "<init>", "()V");
 	auto obj = env->NewObject(cls, constructor);
 	env->SetIntField(obj, env->GetFieldID(cls, "width", "I"), buffer_info.dwSize.X);
@@ -91,7 +90,7 @@ std::pair<int, int> charToVk(jchar ch)
 	return std::make_pair(vk, modifier);
 }
 
-jboolean __stdcall Java_jni_Console_isKeyDown(JNIEnv*, jclass, jchar ch)
+jboolean __stdcall Java_sg_edu_ntu_sce_cx2002_group6_console_Console_isKeyDown(JNIEnv*, jclass, jchar ch)
 {
 	auto vk_modifier_pair = charToVk(ch);
 	
@@ -100,7 +99,7 @@ jboolean __stdcall Java_jni_Console_isKeyDown(JNIEnv*, jclass, jchar ch)
 		&& (!(vk_modifier_pair.second & 2) || (GetAsyncKeyState(VK_CONTROL) & 0x8000));
 }
 
-void __stdcall Java_jni_Console_putStrIn(JNIEnv* env, jclass, jstring str)
+void __stdcall Java_sg_edu_ntu_sce_cx2002_group6_console_Console_putStrIn(JNIEnv* env, jclass, jstring str)
 {
 	auto utf8 = env->GetStringUTFChars(str, nullptr);
 	std::vector<INPUT_RECORD> records;
@@ -163,7 +162,7 @@ BOOL __stdcall handler_routine(DWORD dwCtrlType)
 	if (dwCtrlType == CTRL_CLOSE_EVENT || dwCtrlType == CTRL_C_EVENT) {
 		JNIEnv *env;
 		jvm->AttachCurrentThread(reinterpret_cast<void **>(&env), &env);
-		auto cls = env->FindClass("jni/Console");
+		auto cls = env->FindClass("sg/edu/ntu/sce/cx2002/group6/console/Console");
 		auto method_id = env->GetStaticMethodID(cls, "handleClosing", "()V");
 		env->CallStaticVoidMethod(cls, method_id);
 		jvm->DetachCurrentThread();
@@ -173,7 +172,7 @@ BOOL __stdcall handler_routine(DWORD dwCtrlType)
 	return FALSE;
 }
 
-void __stdcall Java_jni_Console_init(JNIEnv* env, jclass)
+void __stdcall Java_sg_edu_ntu_sce_cx2002_group6_console_Console_init(JNIEnv* env, jclass)
 {
 	env->GetJavaVM(&jvm);
 	SetConsoleCtrlHandler(handler_routine, TRUE);
